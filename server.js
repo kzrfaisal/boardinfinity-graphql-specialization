@@ -9,9 +9,16 @@ const typeDefs = `
     author: String!
   }
   
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+  }
+
   type Query {
     hello: String
     books: [Book!]!
+    user: User
   }
 `;
 
@@ -20,11 +27,14 @@ const books = [
   { id: '2', title: '1984', author: 'George Orwell' },
 ];
 
+const user = { id: 1, name: 'John', email: 'john@xyz.com', age: 21 };
+
 // Resolvers
 const resolvers = {
   Query: {
     hello: () => 'Hello, GraphQL!',
     books: () => books,
+    user: () => user,
   },
 };
 
