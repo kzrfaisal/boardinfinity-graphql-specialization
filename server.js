@@ -7,6 +7,9 @@ const typeDefs = `
     id: ID!
     title: String!
     author: String!
+    publishedYear: Int
+    price: Float
+    inStock: Boolean
   }
   
   type User {
@@ -19,12 +22,27 @@ const typeDefs = `
     hello: String
     books: [Book!]!
     user: User
+    book: Book
   }
 `;
 
 const books = [
-  { id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-  { id: '2', title: '1984', author: 'George Orwell' },
+  {
+    id: '1',
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    publishedYear: 1925,
+    price: 400,
+    inStock: true,
+  },
+  {
+    id: '2',
+    title: '1984',
+    author: 'George Orwell',
+    publishedYear: 1949,
+    price: 450,
+    inStock: false,
+  },
 ];
 
 const user = { id: 1, name: 'John', email: 'john@xyz.com', age: 21 };
@@ -35,6 +53,7 @@ const resolvers = {
     hello: () => 'Hello, GraphQL!',
     books: () => books,
     user: () => user,
+    book: () => books[0],
   },
 };
 
