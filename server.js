@@ -4,7 +4,12 @@ const { startStandaloneServer } = require('@apollo/server/standalone');
 // Schema
 const typeDefs = `
   type Book {
-    title: String
+    title: String!
+    author: Author
+  }
+
+  type Author {
+    name: String!
   }
 
   type Query {
@@ -16,9 +21,18 @@ const typeDefs = `
 const resolvers = {
   Query: {
     book: () => ({
-      title: 'The Pragmatic Programmer',
-      author: 'Andy Hunt',
+      title: 'Refactoring',
+      authorId: 'a1',
     }),
+  },
+  Book: {
+    author: (parent) => {
+      const authors = {
+        a1: { name: 'Martin Fowler' },
+        a2: { name: 'XYZ' },
+      };
+      return authors[parent.authorId];
+    },
   },
 };
 
