@@ -23,6 +23,7 @@ const typeDefs = `
 
   type Query {
     books: [Book]
+    book(id: ID!): Book
   }
 `;
 
@@ -47,6 +48,9 @@ const countries = [
 const resolvers = {
   Query: {
     books: () => books,
+    book: (_, args) => {
+      return books.find((b) => b.id === args.id);
+    },
   },
   Book: {
     author: (parent) => authors.find((a) => a.id === parent.authorId),
