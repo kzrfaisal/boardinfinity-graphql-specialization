@@ -4,34 +4,28 @@ const { startStandaloneServer } = require('@apollo/server/standalone');
 // Schema
 const typeDefs = `
   type Book {
+    id: ID!
     title: String!
-    author: Author
-  }
-
-  type Author {
-    name: String!
+    author: String!
   }
 
   type Query {
-    book: Book
+    books: [Book]
+    book(id: ID!): Book
   }
 `;
+
+const books = [
+  { id: '1', title: 'Refactoring', author: 'Martin Fowler' },
+  { id: '2', title: 'Clean Code', author: 'Robert C. Martin' },
+];
 
 // Resolvers
 const resolvers = {
   Query: {
-    book: () => ({
-      title: 'Refactoring',
-      authorId: 'a1',
-    }),
-  },
-  Book: {
-    author: (parent) => {
-      const authors = {
-        a1: { name: 'Martin Fowler' },
-        a2: { name: 'XYZ' },
-      };
-      return authors[parent.authorId];
+    books: () => books,
+    book: (_, args) => {
+      return books.find((b) => b.id === args.id);
     },
   },
 };
