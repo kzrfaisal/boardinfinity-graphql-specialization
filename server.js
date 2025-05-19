@@ -16,11 +16,37 @@ const typeDefs = `
     OTHER
   }
 
+  interface Address {
+    id: ID!
+    street: String!
+    city: String!
+    zip: String!
+  }
+
+  type HomeAddress implements Address {
+    id: ID!
+    street: String!
+    city: String!
+    zip: String!
+    landmark: String    
+  }
+
+  type OfficeAddress implements Address {
+    id: ID!
+    street: String!
+    city: String!
+    zip: String!
+    companyName: String
+  }
+
+
   input CreateUserInput {
     email: String!, 
     password: String!
     gender: Gender!
   }
+
+
 
   input UpdateUserInput {
     id: ID!
@@ -31,6 +57,7 @@ const typeDefs = `
   type Query {
     user(id: ID!): User
     users: [User]
+    addresses: [Address!]!
   }
 
   type Mutation {
@@ -46,6 +73,25 @@ const users = [
   { id: '2', email: 'mike@xyz.com', gender: 'MALE' },
 ];
 
+const addresses = [
+  {
+    id: '1',
+    street: '123 Park Lane',
+    city: 'New York',
+    zip: '10001',
+    landmark: 'Near Central Park',
+    __typename: 'HomeAddress',
+  },
+  {
+    id: '2',
+    street: '400 Tech Avenue',
+    city: 'San Francisco',
+    zip: '94107',
+    companyName: 'TechCorp Inc.',
+    __typename: 'OfficeAddress',
+  },
+];
+
 let userIdCounter = 3;
 
 // Resolvers
@@ -55,6 +101,7 @@ const resolvers = {
       return users.find((u) => u.id === args.id);
     },
     users: () => users,
+    addresses: () => addresses,
   },
   Mutation: {
     createUser: (_, { input }) => {
