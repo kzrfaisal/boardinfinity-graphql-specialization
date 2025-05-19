@@ -8,13 +8,18 @@ const typeDefs = `
     email: String!
   }
 
+  input CreateUserInput {
+    email: String!, 
+    password: String!
+  }
+
   type Query {
     user(id: ID!): User
     users: [User]
   }
 
   type Mutation {
-    createUser(email: String!, password: String!): User!
+    createUser(input: CreateUserInput!): User!
   }
 `;
 
@@ -35,7 +40,8 @@ const resolvers = {
     users: () => users,
   },
   Mutation: {
-    createUser: (_, { email, password }) => {
+    createUser: (_, { input }) => {
+      const { email, password } = input;
       // In real apps, you'd hash passwords and save to DB
       const newUser = {
         id: userIdCounter++,
