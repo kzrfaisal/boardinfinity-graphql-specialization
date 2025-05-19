@@ -10,6 +10,7 @@ const typeDefs = `
 
   type Query {
     user(id: ID!): User
+    users: [User]
   }
 `;
 
@@ -25,6 +26,7 @@ const resolvers = {
     user: (_, args) => {
       return users.find((u) => u.id === args.id);
     },
+    users: () => users,
   },
 };
 
