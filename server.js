@@ -5,20 +5,26 @@ const { startStandaloneServer } = require('@apollo/server/standalone');
 const typeDefs = `
   type User {
     id: ID!
-    name: String!
+    email: String!
   }
 
   type Query {
     user(id: ID!): User
     users: [User]
   }
+
+  type Mutation {
+    createUser(email: String!, password: String!): User!
+  }
 `;
 
 // Data
 const users = [
-  { id: '1', name: 'Sarah' },
-  { id: '2', name: 'Mike' },
+  { id: '1', email: 'sarah@xyz.com' },
+  { id: '2', email: 'mike@xyz.com' },
 ];
+
+let userIdCounter = 3;
 
 // Resolvers
 const resolvers = {
@@ -27,6 +33,17 @@ const resolvers = {
       return users.find((u) => u.id === args.id);
     },
     users: () => users,
+  },
+  Mutation: {
+    createUser: (_, { email, password }) => {
+      // In real apps, you'd hash passwords and save to DB
+      const newUser = {
+        id: userIdCounter++,
+        email,
+      };
+      users.push(newUser);
+      return newUser;
+    },
   },
 };
 
