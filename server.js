@@ -6,11 +6,20 @@ const typeDefs = `
   type User {
     id: ID!
     email: String!
+    gender: Gender!
+  }
+
+  enum Gender {
+    MALE
+    FEMALE
+    NON_BINARY
+    OTHER
   }
 
   input CreateUserInput {
     email: String!, 
     password: String!
+    gender: Gender!
   }
 
   input UpdateUserInput {
@@ -33,8 +42,8 @@ const typeDefs = `
 
 // Data
 const users = [
-  { id: '1', email: 'sarah@xyz.com' },
-  { id: '2', email: 'mike@xyz.com' },
+  { id: '1', email: 'sarah@xyz.com', gender: 'FEMALE' },
+  { id: '2', email: 'mike@xyz.com', gender: 'MALE' },
 ];
 
 let userIdCounter = 3;
@@ -49,11 +58,12 @@ const resolvers = {
   },
   Mutation: {
     createUser: (_, { input }) => {
-      const { email, password } = input;
+      const { email, password, gender } = input;
       // In real apps, you'd hash passwords and save to DB
       const newUser = {
         id: userIdCounter++,
         email,
+        gender,
       };
       users.push(newUser);
       return newUser;
