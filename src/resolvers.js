@@ -1,67 +1,3 @@
-const { ApolloServer } = require('@apollo/server');
-const { startStandaloneServer } = require('@apollo/server/standalone');
-
-// Schema
-const typeDefs = `
-  type User {
-    id: ID!
-    email: String!
-    gender: Gender!
-  }
-
-  enum Gender {
-    MALE
-    FEMALE
-    NON_BINARY
-    OTHER
-  }
-
-  interface Address {
-    id: ID!
-    street: String!
-    city: String!
-    zip: String!
-  }
-
-  type HomeAddress {
-    landmark: String    
-  }
-
-  type OfficeAddress {
-    companyName: String
-  }
-
-  union AddressResult = HomeAddress | OfficeAddress
-
-
-  input CreateUserInput {
-    email: String!, 
-    password: String!
-    gender: Gender!
-  }
-
-
-
-  input UpdateUserInput {
-    id: ID!
-    email: String
-    password: String
-  }
-
-  type Query {
-    user(id: ID!): User
-    users: [User]
-    addresses: [Address!]!
-    searchAddresses: [AddressResult!]!
-  }
-
-  type Mutation {
-    createUser(input: CreateUserInput!): User!
-    updateUser(input: UpdateUserInput!): User
-    deleteUser(id: ID!): Boolean!
-  }
-`;
-
 // Data
 const users = [
   { id: '1', email: 'sarah@xyz.com', gender: 'FEMALE' },
@@ -134,11 +70,4 @@ const resolvers = {
   },
 };
 
-// Start server
-const server = new ApolloServer({ typeDefs, resolvers });
-
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-}).then(() => {
-  console.log('Server ready at http://localhost:4000');
-});
+module.exports = resolvers;
