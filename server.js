@@ -23,21 +23,15 @@ const typeDefs = `
     zip: String!
   }
 
-  type HomeAddress implements Address {
-    id: ID!
-    street: String!
-    city: String!
-    zip: String!
+  type HomeAddress {
     landmark: String    
   }
 
-  type OfficeAddress implements Address {
-    id: ID!
-    street: String!
-    city: String!
-    zip: String!
+  type OfficeAddress {
     companyName: String
   }
+
+  union AddressResult = HomeAddress | OfficeAddress
 
 
   input CreateUserInput {
@@ -58,6 +52,7 @@ const typeDefs = `
     user(id: ID!): User
     users: [User]
     addresses: [Address!]!
+    searchAddresses: [AddressResult!]!
   }
 
   type Mutation {
@@ -102,6 +97,7 @@ const resolvers = {
     },
     users: () => users,
     addresses: () => addresses,
+    searchAddresses: () => addresses,
   },
   Mutation: {
     createUser: (_, { input }) => {
