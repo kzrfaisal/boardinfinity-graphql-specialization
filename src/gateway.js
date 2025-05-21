@@ -1,8 +1,8 @@
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const { stitchSchemas } = require('@graphql-tools/stitch');
-const localSchema = require('./local.schema');
-const createRemoteSchema = require('./remote.schema');
+const localSchema = require('./schema/local.schema');
+const createRemoteSchema = require('./schema/remote.schema');
 
 async function startGateway() {
   const remoteSchema = await createRemoteSchema();

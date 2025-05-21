@@ -4,25 +4,6 @@ const users = [
   { id: '2', email: 'mike@xyz.com', gender: 'MALE' },
 ];
 
-const addresses = [
-  {
-    id: '1',
-    street: '123 Park Lane',
-    city: 'New York',
-    zip: '10001',
-    landmark: 'Near Central Park',
-    __typename: 'HomeAddress',
-  },
-  {
-    id: '2',
-    street: '400 Tech Avenue',
-    city: 'San Francisco',
-    zip: '94107',
-    companyName: 'TechCorp Inc.',
-    __typename: 'OfficeAddress',
-  },
-];
-
 let userIdCounter = 3;
 
 // Resolvers
@@ -32,8 +13,6 @@ const resolvers = {
       return users.find((u) => u.id === args.id);
     },
     users: () => users,
-    addresses: () => addresses,
-    searchAddresses: () => addresses,
   },
   Mutation: {
     createUser: (_, { input }) => {

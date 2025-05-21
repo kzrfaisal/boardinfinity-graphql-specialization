@@ -1,7 +1,7 @@
 type User {
   id: ID!
   email: String!
-  gender: Gender!
+  gender: Gender! @deprecated(reason: "We no longer allow gender to be fetched")
 }
 
 enum Gender {
