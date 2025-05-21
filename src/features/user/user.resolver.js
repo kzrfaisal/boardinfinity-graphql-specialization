@@ -16,7 +16,22 @@ const resolvers = {
   },
   Mutation: {
     createUser: (_, { input }) => {
-      const { email, password, gender } = input;
+      let { email, password, gender } = input;
+
+      // ✅ Basic validation
+      if (!email || !password) {
+        throw new Error('Email and password are required.');
+      }
+
+      // ✅ Sanitization steps
+      email = email.trim().toLowerCase(); // Normalize casing
+      password = password.trim(); // Remove extra spaces
+      gender = gender?.toUpperCase(); // Ensure enum consistency if coming from raw input
+
+      if (password.length < 8) {
+        throw new Error('Password must be at least 8 characters long.');
+      }
+
       // In real apps, you'd hash passwords and save to DB
       const newUser = {
         id: userIdCounter++,
