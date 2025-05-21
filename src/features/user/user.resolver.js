@@ -1,3 +1,5 @@
+const { GraphQLError } = require('graphql');
+
 // Data
 const users = [
   { id: '1', email: 'sarah@xyz.com', gender: 'FEMALE' },
@@ -20,7 +22,12 @@ const resolvers = {
 
       // ✅ Basic validation
       if (!email || !password) {
-        throw new Error('Email and password are required.');
+        throw new GraphQLError('Email and password are required.', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            field: 'email',
+          },
+        });
       }
 
       // ✅ Sanitization steps
@@ -29,7 +36,13 @@ const resolvers = {
       gender = gender?.toUpperCase(); // Ensure enum consistency if coming from raw input
 
       if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters long.');
+        throw new GraphQLError('Password must be at least 8 characters long.', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            field: 'password',
+            minLength: 8,
+          },
+        });
       }
 
       // In real apps, you'd hash passwords and save to DB
