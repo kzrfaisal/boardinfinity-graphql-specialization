@@ -2,10 +2,12 @@
 const { loadFilesSync } = require('@graphql-tools/load-files');
 const { mergeTypeDefs } = require('@graphql-tools/merge');
 const path = require('path');
+const { EmailTypeDef } = require('../shared/email.scalar');
 
-const typeArrays = loadFilesSync(
-  path.join(__dirname, '../features/**/*.graphql')
-).concat(loadFilesSync(path.join(__dirname, '../shared/**/*.graphql')));
-const typeDefs = mergeTypeDefs(typeArrays);
+const typeDefs = mergeTypeDefs([
+  EmailTypeDef,
+  ...loadFilesSync(path.join(__dirname, '../features/**/*.graphql')),
+  ...loadFilesSync(path.join(__dirname, '../shared/**/*.graphql')),
+]);
 
 module.exports = typeDefs;

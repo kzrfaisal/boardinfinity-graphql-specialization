@@ -1,6 +1,8 @@
+scalar Email
+
 type User {
   id: ID!
-  email: String!
+  email: Email!
   gender: Gender! @deprecated(reason: "We no longer allow gender to be fetched")
 }
 
@@ -12,7 +14,7 @@ enum Gender {
 }
 
 input CreateUserInput {
-  email: String!
+  email: Email!
   password: String!
   gender: Gender!
 }
