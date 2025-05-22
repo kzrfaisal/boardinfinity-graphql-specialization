@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const { GraphQLError } = require('graphql');
+
 const SECRET = 'my-secret';
 
 function getUserFromToken(token) {
@@ -9,4 +11,12 @@ function getUserFromToken(token) {
   }
 }
 
-module.exports = { getUserFromToken };
+function isAuthorized(user, allowedRoles) {
+  if (!user || !allowedRoles.includes(user.role)) {
+    throw new GraphQLError('Unauthorized access', {
+      extensions: { code: 'FORBIDDEN' },
+    });
+  }
+}
+
+module.exports = { getUserFromToken, isAuthorized };

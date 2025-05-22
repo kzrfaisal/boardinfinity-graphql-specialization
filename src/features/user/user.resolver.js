@@ -1,5 +1,6 @@
 const { GraphQLError } = require('graphql');
 const pubsub = require('../../shared/pubsub');
+const { isAuthorized } = require('../../shared/auth');
 
 // Data
 const users = [
@@ -75,7 +76,9 @@ const resolvers = {
 
       return user;
     },
-    deleteUser: (_, { id }) => {
+    deleteUser: (_, { id }, context) => {
+      isAuthorized(context.user, ['admin']);
+
       const index = users.findIndex((u) => u.id === id);
       if (index === -1) {
         throw new Error('User not found.');
