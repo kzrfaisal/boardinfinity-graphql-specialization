@@ -1,4 +1,5 @@
 const { GraphQLError } = require('graphql');
+const pubsub = require('../../shared/pubsub');
 
 // Data
 const users = [
@@ -73,6 +74,11 @@ const resolvers = {
       }
       users.splice(index, 1);
       return true;
+    },
+  },
+  Subscriptions: {
+    userCreated: {
+      subscribe: () => pubsub.asyncIterableIterator('USER_CREATED'),
     },
   },
 };

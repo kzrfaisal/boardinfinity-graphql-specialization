@@ -18,6 +18,7 @@
     "@graphql-tools/stitch": "^9.4.23",
     "@graphql-tools/url-loader": "^8.0.31",
     "cross-fetch": "^4.1.0",
-    "graphql": "^16.11.0"
+    "graphql": "^16.11.0",
+    "graphql-subscriptions": "^3.0.0"
   }
 }
