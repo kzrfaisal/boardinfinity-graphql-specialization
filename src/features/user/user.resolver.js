@@ -53,6 +53,11 @@ const resolvers = {
         gender,
       };
       users.push(newUser);
+
+      pubsub.publish('USER_CREATED', {
+        userCreated: newUser,
+      });
+
       return newUser;
     },
     updateUser: (_, { input }) => {
@@ -76,7 +81,7 @@ const resolvers = {
       return true;
     },
   },
-  Subscriptions: {
+  Subscription: {
     userCreated: {
       subscribe: () => pubsub.asyncIterableIterator('USER_CREATED'),
     },

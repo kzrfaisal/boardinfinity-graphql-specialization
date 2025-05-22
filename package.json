@@ -17,8 +17,11 @@
     "@graphql-tools/schema": "^10.0.23",
     "@graphql-tools/stitch": "^9.4.23",
     "@graphql-tools/url-loader": "^8.0.31",
+    "apollo-server-express": "^3.13.0",
     "cross-fetch": "^4.1.0",
+    "express": "^4.21.2",
     "graphql": "^16.11.0",
-    "graphql-subscriptions": "^3.0.0"
+    "graphql-subscriptions": "^3.0.0",
+    "subscriptions-transport-ws": "^0.11.0"
   }
 }

@@ -1,14 +1,37 @@
-const { ApolloServer } = require('@apollo/server');
-const { startStandaloneServer } = require('@apollo/server/standalone');
+const express = require('express');
+const { createServer } = require('http');
+const { ApolloServer } = require('apollo-server-express');
+const { execute, subscribe } = require('graphql');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
+const schema = require('./schema/local.schema');
 
-const typeDefs = require('./schema'); // now loads merged schema
-const resolvers = require('./resolvers');
+async function startServer() {
+  const app = express();
 
-// Start server
-const server = new ApolloServer({ typeDefs, resolvers });
+  const apolloServer = new ApolloServer({ schema });
+  await apolloServer.start();
 
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-}).then(() => {
-  console.log('Server ready at http://localhost:4000');
-});
+  apolloServer.applyMiddleware({ app });
+
+  const httpServer = createServer(app);
+
+  // ✅ Setup WebSocket for subscriptions
+  SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+    },
+    {
+      server: httpServer,
+      path: apolloServer.graphqlPath,
+    }
+  );
+
+  httpServer.listen(4000, () => {
+    console.log('🚀 HTTP ready at http://localhost:4000/graphql');
+    console.log('📡 Subscriptions ready at ws://localhost:4000/graphql');
+  });
+}
+
+startServer();
