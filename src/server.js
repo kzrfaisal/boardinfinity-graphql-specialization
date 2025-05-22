@@ -4,11 +4,19 @@ const { ApolloServer } = require('apollo-server-express');
 const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 const schema = require('./schema/local.schema');
+const { getUserFromToken } = require('./shared/auth');
 
 async function startServer() {
   const app = express();
 
-  const apolloServer = new ApolloServer({ schema });
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req }) => {
+      const token = req.headers.authorization || '';
+      const user = getUserFromToken(token.replace('Bearer ', ''));
+      return { user };
+    },
+  });
   await apolloServer.start();
 
   apolloServer.applyMiddleware({ app });

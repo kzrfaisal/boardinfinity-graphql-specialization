@@ -16,6 +16,9 @@ const resolvers = {
       return users.find((u) => u.id === args.id);
     },
     users: () => users,
+    me: (_, __, context) => {
+      return context.user;
+    },
   },
   Mutation: {
     createUser: (_, { input }) => {
