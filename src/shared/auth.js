@@ -19,4 +19,12 @@ function isAuthorized(user, allowedRoles) {
   }
 }
 
-module.exports = { getUserFromToken, isAuthorized };
+function isAuthenticated(user) {
+  if (!user) {
+    throw new GraphQLError('Authentication required', {
+      extensions: { code: 'UNAUTHENTICATED' },
+    });
+  }
+}
+
+module.exports = { getUserFromToken, isAuthorized, isAuthenticated };

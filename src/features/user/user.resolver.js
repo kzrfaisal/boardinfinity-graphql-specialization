@@ -1,6 +1,7 @@
 const { GraphQLError } = require('graphql');
 const pubsub = require('../../shared/pubsub');
 const { isAuthorized } = require('../../shared/auth');
+const { isAuthenticated } = require('../../shared/auth');
 
 // Data
 const users = [
@@ -18,12 +19,14 @@ const resolvers = {
     },
     users: () => users,
     me: (_, __, context) => {
+      isAuthenticated(context.user);
       return context.user;
     },
   },
   Mutation: {
-    createUser: (_, { input }) => {
+    createUser: (_, { input }, context) => {
       let { email, password, gender } = input;
+      isAuthenticated(context.user);
 
       // ✅ Basic validation
       if (!email || !password) {
