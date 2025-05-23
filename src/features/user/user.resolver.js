@@ -2,6 +2,8 @@ const { GraphQLError } = require('graphql');
 const pubsub = require('../../shared/pubsub');
 const { isAuthorized } = require('../../shared/auth');
 const { isAuthenticated } = require('../../shared/auth');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 // Data
 const users = [
@@ -17,7 +19,7 @@ const resolvers = {
     user: (_, args) => {
       return users.find((u) => u.id === args.id);
     },
-    users: () => users,
+    users: () => prisma.user.findMany(),
     me: (_, __, context) => {
       isAuthenticated(context.user);
       return context.user;
@@ -54,11 +56,12 @@ const resolvers = {
       }
 
       // In real apps, you'd hash passwords and save to DB
-      const newUser = {
-        id: userIdCounter++,
-        email,
-        gender,
-      };
+      const newUser = prisma.user.create({
+        data: {
+          email,
+          gender,
+        },
+      });
       users.push(newUser);
 
       pubsub.publish('USER_CREATED', {
