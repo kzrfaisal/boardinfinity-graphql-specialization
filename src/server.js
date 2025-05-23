@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { createServer } = require('http');
 const { ApolloServer } = require('apollo-server-express');
@@ -5,6 +6,8 @@ const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 const schema = require('./schema/local.schema');
 const { getUserFromToken } = require('./shared/auth');
+
+const { PORT } = require('./config');
 
 async function startServer() {
   const app = express();
@@ -36,9 +39,9 @@ async function startServer() {
     }
   );
 
-  httpServer.listen(4000, () => {
-    console.log('🚀 HTTP ready at http://localhost:4000/graphql');
-    console.log('📡 Subscriptions ready at ws://localhost:4000/graphql');
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 HTTP ready at http://localhost:${PORT}/graphql`);
+    console.log(`📡 Subscriptions ready at ws://localhost:${PORT}/graphql`);
   });
 }
 
