@@ -19,6 +19,7 @@ async function startServer() {
       const user = getUserFromToken(token.replace('Bearer ', ''));
       return { user };
     },
+    introspection: true,
   });
   await apolloServer.start();
 
