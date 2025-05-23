@@ -17,12 +17,17 @@
     "@graphql-tools/schema": "^10.0.23",
     "@graphql-tools/stitch": "^9.4.23",
     "@graphql-tools/url-loader": "^8.0.31",
+    "@prisma/client": "^6.8.2",
     "apollo-server-express": "^3.13.0",
     "cross-fetch": "^4.1.0",
     "express": "^4.21.2",
     "graphql": "^16.11.0",
     "graphql-subscriptions": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7",
     "subscriptions-transport-ws": "^0.11.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.8.2"
   }
 }
