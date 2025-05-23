@@ -1,0 +1,42 @@
+scalar Email
+
+type User {
+  id: ID!
+  email: Email!
+  gender: Gender! @deprecated(reason: "We no longer allow gender to be fetched")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  OTHER
+}
+
+input CreateUserInput {
+  email: Email!
+  password: String!
+  gender: Gender!
+}
+
+input UpdateUserInput {
+  id: ID!
+  email: String
+  password: String
+}
+
+type Query {
+  user(id: ID!): User
+  users: [User]
+  me: User
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean!
+}
+
+type Subscription {
+  userCreated: User!
+}
