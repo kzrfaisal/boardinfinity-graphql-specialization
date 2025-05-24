@@ -19,7 +19,10 @@ const resolvers = {
     user: (_, args) => {
       return users.find((u) => u.id === args.id);
     },
-    users: () => prisma.user.findMany(),
+    users: () => {
+      console.log('🟡 users resolver called at', new Date().toISOString());
+      return prisma.user.findMany();
+    },
     me: (_, __, context) => {
       isAuthenticated(context.user);
       return context.user;
