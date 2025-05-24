@@ -20,6 +20,26 @@ async function startServer() {
       return { user };
     },
     introspection: true,
+    plugins: [
+      {
+        async requestDidStart() {
+          return {
+            async executionDidStart() {
+              return {
+                willResolveField({ info }) {
+                  const fieldName = info.fieldName;
+                  const start = Date.now();
+                  return () => {
+                    const duration = Date.now() - start;
+                    console.log(`⏱️ ${fieldName} took ${duration}ms`);
+                  };
+                },
+              };
+            },
+          };
+        },
+      },
+    ],
   });
   await apolloServer.start();
 
