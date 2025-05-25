@@ -6,6 +6,7 @@ const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 const rateLimit = require('express-rate-limit');
 
+const logger = require('./logger');
 const schema = require('./schema/local.schema');
 const { getUserFromToken } = require('./shared/auth');
 
@@ -29,6 +30,19 @@ async function startServer() {
       return { user };
     },
     introspection: true,
+    formatError: (err) => {
+      logger.error({
+        message: err.message,
+        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+        path: err.path,
+        timestamp: new Date().toISOString(),
+      });
+
+      return {
+        message: err.message,
+        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+      };
+    },
     plugins: [
       {
         async requestDidStart() {

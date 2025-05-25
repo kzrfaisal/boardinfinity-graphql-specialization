@@ -8,3 +8,6 @@ src/generated/
 
 # Environment and local config
 .env
+
+# log files
+logs/
