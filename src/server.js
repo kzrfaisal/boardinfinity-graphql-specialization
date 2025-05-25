@@ -4,13 +4,23 @@ const { createServer } = require('http');
 const { ApolloServer } = require('apollo-server-express');
 const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
+const rateLimit = require('express-rate-limit');
+
+const logger = require('./logger');
 const schema = require('./schema/local.schema');
 const { getUserFromToken } = require('./shared/auth');
 
 const { PORT } = require('./config');
 
+const limiter = rateLimit({
+  windowMs: 10 * 1000, // ✅ 10 seconds
+  max: 5, // ✅ max 5 requests per IP
+  keyGenerator: (req) => req.headers['x-user-id'] || req.ip, // fallback to IP
+});
+
 async function startServer() {
   const app = express();
+  app.use(limiter); // ✅ Limit applies globally to all HTTP requests
 
   const apolloServer = new ApolloServer({
     schema,
@@ -20,6 +30,19 @@ async function startServer() {
       return { user };
     },
     introspection: true,
+    formatError: (err) => {
+      logger.error({
+        message: err.message,
+        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+        path: err.path,
+        timestamp: new Date().toISOString(),
+      });
+
+      return {
+        message: err.message,
+        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+      };
+    },
     plugins: [
       {
         async requestDidStart() {
@@ -31,7 +54,7 @@ async function startServer() {
                   const start = Date.now();
                   return () => {
                     const duration = Date.now() - start;
-                    console.log(`⏱️ ${fieldName} took ${duration}ms`);
+                    // console.log(`⏱️ ${fieldName} took ${duration}ms`);
                   };
                 },
               };
