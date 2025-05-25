@@ -3,6 +3,7 @@ const pubsub = require('../../shared/pubsub');
 const { isAuthorized } = require('../../shared/auth');
 const { isAuthenticated } = require('../../shared/auth');
 const { PrismaClient } = require('@prisma/client');
+const { ApolloError } = require('apollo-server-express');
 const prisma = new PrismaClient();
 
 // Data
@@ -16,8 +17,19 @@ let userIdCounter = 3;
 // Resolvers
 const resolvers = {
   Query: {
-    user: (_, args) => {
-      return users.find((u) => u.id === args.id);
+    user: (_, { id }) => {
+      if (id === 'unauth') {
+        throw new ApolloError('User not authenticated', 'UNAUTHENTICATED');
+      }
+
+      const user = users.find((u) => u.id === id);
+      if (!user) {
+        throw new ApolloError('User not found', 'NOT_FOUND', {
+          status: 404,
+          reason: 'Invalid user ID',
+        });
+      }
+      return user;
     },
     users: () => {
       console.log('🟡 users resolver called at', new Date().toISOString());
