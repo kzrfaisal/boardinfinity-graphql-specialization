@@ -27,6 +27,23 @@ const resolvers = {
       isAuthenticated(context.user);
       return context.user;
     },
+    paginatedUsers: async (_, { take = 5, after }) => {
+      const users = await prisma.user.findMany({
+        take,
+        skip: after ? 1 : 0,
+        ...(after && { cursor: { id: after } }),
+        orderBy: { id: 'asc' },
+      });
+      const lastUser = users[users.length - 1];
+
+      return {
+        users,
+        pageInfo: {
+          endCursor: lastUser?.id || null,
+          hasNextPage: users.length === take,
+        },
+      };
+    },
   },
   Mutation: {
     createUser: (_, { input }, context) => {
