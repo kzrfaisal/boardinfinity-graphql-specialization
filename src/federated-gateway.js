@@ -16,5 +16,5 @@ const server = new ApolloServer({ gateway });
 startStandaloneServer(server, {
   listen: { port: 4000 },
 }).then(({ url }) => {
-  console.log(`🚀 Gateway ready at ${url}`);
+  console.log(`🌐 Gateway ready at ${url}`);
 });

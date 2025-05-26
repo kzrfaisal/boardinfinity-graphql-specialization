@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server-v4.js",
-    "build": "npm install && npx prisma generate && npx prisma migrate deploy && node prisma/seed.js"
+    "build": "npm install && npx prisma generate && npx prisma migrate deploy && node prisma/seed.js",
+    "start:user": "node src/features/user/user.subgraph.js",
+    "start:address": "node src/features/address/address.subgraph.js",
+    "start:gateway": "wait-on --config src/config/wait-on.config.js && node src/federated-gateway.js",
+    "start:all": "npm-run-all --parallel start:user start:address start:gateway"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +40,8 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "prisma": "^6.8.2"
+    "npm-run-all": "^4.1.5",
+    "prisma": "^6.8.2",
+    "wait-on": "^8.0.3"
   }
 }
