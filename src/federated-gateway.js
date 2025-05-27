@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const { ApolloGateway, IntrospectAndCompose } = require('@apollo/gateway');
@@ -5,12 +6,12 @@ const logger = require('./logger');
 
 const gateway = new ApolloGateway({
   debug: true,
-  supergraphSdl: new IntrospectAndCompose({
-    subgraphs: [
-      { name: 'users', url: 'http://localhost:4001/graphql' },
-      { name: 'legacy', url: 'http://localhost:4005/graphql' },
-    ],
-  }),
+  // supergraphSdl: new IntrospectAndCompose({
+  //   subgraphs: [
+  //     { name: 'users', url: 'http://localhost:4001/graphql' },
+  //     { name: 'legacy', url: 'http://localhost:4005/graphql' },
+  //   ],
+  // }),
 });
 
 const server = new ApolloServer({
