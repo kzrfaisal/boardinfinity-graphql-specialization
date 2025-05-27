@@ -4,6 +4,6 @@ const path = require('path');
 const { EmailScalar } = require('../shared/email.scalar');
 
 module.exports = mergeResolvers([
-  ...loadFilesSync(path.join(__dirname, '../features/**/*.resolver.js')),
+  ...loadFilesSync(path.join(__dirname, '../features/**/address.resolver.js')),
   { Email: EmailScalar },
 ]);

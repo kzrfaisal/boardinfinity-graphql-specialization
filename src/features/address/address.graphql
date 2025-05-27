@@ -15,10 +15,10 @@ type OfficeAddress {
 
 union AddressResult = HomeAddress | OfficeAddress
 
-extend type User @key(fields: "id") {
-  id: ID! @external
-  addresses: [Address!]!
-}
+# extend type User @key(fields: "id") {
+#   id: ID! @external
+#   addresses: [Address!]!
+# }
 
 type Query {
   addresses: [Address!]!

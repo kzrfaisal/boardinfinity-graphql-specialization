@@ -24,9 +24,9 @@ const resolvers = {
     addresses: () => addresses,
     searchAddresses: () => addresses,
   },
-  User: {
-    addresses: (user) => addresses,
-  },
+  // User: {
+  //   addresses: (user) => addresses,
+  // },
 };
 
 module.exports = resolvers;
