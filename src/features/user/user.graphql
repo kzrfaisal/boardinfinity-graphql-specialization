@@ -10,7 +10,7 @@ enum CacheControlScope {
 
 scalar Email
 
-type User {
+type User @key(fields: "id") {
   id: ID!
   email: Email!
   gender: Gender! @deprecated(reason: "We no longer allow gender to be fetched")
