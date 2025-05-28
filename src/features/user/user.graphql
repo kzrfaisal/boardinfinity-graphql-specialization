@@ -10,6 +10,7 @@ enum CacheControlScope {
 
 scalar Email
 
+# type User @key(fields: "id") {
 type User {
   id: ID!
   email: Email!

@@ -6,7 +6,7 @@ const { EmailTypeDef } = require('../shared/email.scalar');
 
 const typeDefs = mergeTypeDefs([
   EmailTypeDef,
-  ...loadFilesSync(path.join(__dirname, '../features/**/*.graphql')),
+  ...loadFilesSync(path.join(__dirname, '../features/**/address.graphql')),
   ...loadFilesSync(path.join(__dirname, '../shared/**/*.graphql')),
 ]);
 

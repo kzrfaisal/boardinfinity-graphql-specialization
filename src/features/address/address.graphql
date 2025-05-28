@@ -1,8 +1,14 @@
-interface Address {
+type Location {
   id: ID!
-  street: String!
   city: String!
   zip: String!
+}
+
+type Address {
+  id: ID!
+  street: String!
+  locationId: ID!
+  locationDetails: Location
 }
 
 type HomeAddress {
@@ -14,6 +20,11 @@ type OfficeAddress {
 }
 
 union AddressResult = HomeAddress | OfficeAddress
+
+# extend type User @key(fields: "id") {
+#   id: ID! @external
+#   addresses: [Address!]!
+# }
 
 type Query {
   addresses: [Address!]!

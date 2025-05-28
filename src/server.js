@@ -5,6 +5,7 @@ const { ApolloServer } = require('apollo-server-express');
 const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 const rateLimit = require('express-rate-limit');
+const { createLocationLoader } = require('./features/address/locationLoader');
 
 const logger = require('./logger');
 const schema = require('./schema/local.schema');
@@ -27,7 +28,12 @@ async function startServer() {
     context: ({ req }) => {
       const token = req.headers.authorization || '';
       const user = getUserFromToken(token.replace('Bearer ', ''));
-      return { user };
+      return {
+        user,
+        loaders: {
+          locationLoader: createLocationLoader(),
+        },
+      };
     },
     introspection: true,
     formatError: (err) => {

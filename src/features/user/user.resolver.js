@@ -5,6 +5,8 @@ const { isAuthenticated } = require('../../shared/auth');
 const { PrismaClient } = require('@prisma/client');
 const { ApolloError } = require('apollo-server-express');
 const prisma = new PrismaClient();
+const UserModel = require('../../../mongodb/user.model');
+const fetch = require('cross-fetch');
 
 // Data
 const users = [
@@ -31,9 +33,19 @@ const resolvers = {
       }
       return user;
     },
-    users: () => {
+    users: async () => {
       console.log('🟡 users resolver called at', new Date().toISOString());
-      return prisma.user.findMany();
+      // return prisma.user.findMany();
+      // return await UserModel.find();
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/users'
+      );
+      const json = await response.json();
+      return json.map((user) => ({
+        id: user.id,
+        email: user.email || 'unknown@example.com',
+        gender: 'OTHER',
+      }));
     },
     me: (_, __, context) => {
       isAuthenticated(context.user);
