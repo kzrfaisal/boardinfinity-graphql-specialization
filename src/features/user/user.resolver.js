@@ -5,6 +5,7 @@ const { isAuthenticated } = require('../../shared/auth');
 const { PrismaClient } = require('@prisma/client');
 const { ApolloError } = require('apollo-server-express');
 const prisma = new PrismaClient();
+const UserModel = require('../../../mongodb/user.model');
 
 // Data
 const users = [
@@ -31,9 +32,10 @@ const resolvers = {
       }
       return user;
     },
-    users: () => {
+    users: async () => {
       console.log('🟡 users resolver called at', new Date().toISOString());
-      return prisma.user.findMany();
+      // return prisma.user.findMany();
+      return await UserModel.find();
     },
     me: (_, __, context) => {
       isAuthenticated(context.user);
